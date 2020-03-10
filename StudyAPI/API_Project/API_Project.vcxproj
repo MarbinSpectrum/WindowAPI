@@ -152,18 +152,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="API_Project.h" />
+    <ClInclude Include="Draw.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="Resource.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TETRIS.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API_Project.cpp" />
+    <ClCompile Include="Draw.cpp" />
+    <ClCompile Include="TETRIS.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="API_Project.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="API_Project.ico" />
+    <Image Include="C:\Users\Ymk\Pictures\Img.bmp" />
     <Image Include="small.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

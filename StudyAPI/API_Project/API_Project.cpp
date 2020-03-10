@@ -1,9 +1,54 @@
 ﻿#include "framework.h"
 #include "API_Project.h"
+#include "Resource.h"
+#include "DRAW.h"
+#include "TETRIS.h"
 
-// API에서는 사용자가 직접적으로 리소스를 제어하는 방식을 제공하지 않음
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////																																																	////
+////                 :::       :::	   :::::::::::	   ::::    :::		:::::::::		 ::::::::	   :::		:::					    :::			:::::::::	  :::::::::::							////
+////                 :+:	   :+:	       :+:		   :+:+:   :+:		:+:	   :+:		:+:	   :+:	   :+:	    :+:					  :+: :+:		:+:    :+:	      :+:								////
+////                 +:+       +:+	 	   +:+		   :+:+:+  +:+		+:+    +:+		+:+    +:+	   +:+		+:+					 +:+   +:+		+:+	   +:+		  +:+								////
+////                 +#+  +:+  +#+	 	   +#+		   +#+ +:+ +#+		+#+	   +:+		+#+	   +:+	   +#+  +:+  +#+				+#++:++#++:		+#++:++#+		  +#+								////
+////                 +#+ ++#++ +#+	 	   +#+		   +#+  +#+#+#		+#+	   #+#		+#+    +#+	   +#+ +#+#+ +#+				+#+		+#+		+#+				  +#+								////
+////                  #+#+# #+#+#		   #+#		   #+#   #+#+#		#+#    #+#		#+#    #+#	    #+#+# #+#+#					#+#     #+#		#+#				  #+#								////
+////                   ###   ###	   ###########	   ###    ####		#########		 ########		 ###   ###					###     ###		###			  ###########							////
+////																																																	////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// api 프로그래밍
+int time = 0;
+
+Vector2 window = Vector2(1200,660);
+Vector2 boardBox = Vector2(360, 600);
+Vector2 boardPos = Vector2((window.x - boardBox.x) / 2, 5);
+
+Vector2 playerBlockPos = Vector2(6, 0);
+int polygonNum = 2;
+int angleNum = 0;
+
+int blockSize = 30;
+
+HBITMAP hbmBuffer = nullptr;
+HBITMAP hbmOldBuffer = nullptr;
+
+HDC hDC = nullptr;
+HDC hDCBuffer = nullptr;
+
+HBRUSH hMyBrush = nullptr;
+HBRUSH hOldBrush = nullptr;
+
+RECT crt;
+
+HINSTANCE hINSTANCE;
+static HBITMAP backGround;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 LRESULT WindowProc
 (
@@ -14,8 +59,126 @@ LRESULT WindowProc
 {
 	switch (Msg)
 	{
-	case WM_DESTROY :				// 윈도우가 파괴됨
-		PostQuitMessage(0);			// 메세지 큐에 WM_QUIT 메세지를 넣어주는 함수 (WM_QUIT : 윈도우를 종료하라는 메세지)
+	case WM_CREATE:								// 윈도우가 생성될때	
+
+		backGround = LoadBitmap(hINSTANCE, MAKEINTRESOURCE(IDB_IMG));
+
+		polygonNum = RandomRange(0, 6);
+
+		GetClientRect(hWnd, &crt);				// 화면크기를 Rect변수에 넣어줌
+
+		SetTimer(hWnd, 1, 10, NULL);			// 0.01초주기로 타이머설정
+		SendMessage(hWnd, WM_TIMER, 1, 0);		// 타이머 메시지를 보내줌
+
+		hDC = GetDC(hWnd);
+		break;
+
+	case WM_COMMAND:							// 사용자가 추가한 이벤트를 처리할 때 사용됨
+		break;
+	case WM_KEYDOWN:
+		switch (wParam) {
+		case VK_LEFT:
+			if (CanMove(playerBlockPos.x - 1, playerBlockPos.y, polygonNum, angleNum))
+				playerBlockPos.x -= 1;
+			break;
+		case VK_RIGHT:
+			if (CanMove(playerBlockPos.x + 1, playerBlockPos.y, polygonNum, angleNum))
+				playerBlockPos.x += 1;
+			break;
+		case VK_UP:
+			if (CanMove(playerBlockPos.x, playerBlockPos.y, polygonNum, (angleNum + 1) % 4))
+				angleNum += 1;
+			angleNum = angleNum % 4;
+			break;
+		case VK_SPACE :
+			while(CanMove(playerBlockPos.x, playerBlockPos.y + 1, polygonNum, angleNum))
+				playerBlockPos.y += 1;
+		case VK_DOWN:
+			if (CanMove(playerBlockPos.x, playerBlockPos.y + 1, polygonNum, angleNum))
+				playerBlockPos.y += 1;
+			else
+			{
+				SetBlock(playerBlockPos.x, playerBlockPos.y, polygonNum, angleNum);
+
+				playerBlockPos = Vector2(6, 0);
+				angleNum = 0;
+				polygonNum = RandomRange(0, 6);
+			}
+
+			break;
+		}
+	case WM_TIMER:								// 타이머 신호가 왓을때
+		time++;
+		if (time % 60 == 0)
+		{
+			if (CanMove(playerBlockPos.x, playerBlockPos.y + 1, polygonNum, angleNum))
+				playerBlockPos.y += 1;
+			else
+			{
+				SetBlock(playerBlockPos.x, playerBlockPos.y, polygonNum, angleNum);
+
+				playerBlockPos = Vector2(6, 0);
+				angleNum = 0;
+				polygonNum = RandomRange(0, 6);
+			}
+		}
+
+
+	case WM_PAINT:
+
+		//버퍼에 화면크기만큼 그릴수있게해줌
+		hDCBuffer = CreateCompatibleDC(hDC);
+		hbmBuffer = CreateCompatibleBitmap(hDC, crt.right, crt.bottom);
+		hbmOldBuffer = (HBITMAP)SelectObject(hDCBuffer, hbmBuffer);
+
+
+
+
+
+
+
+
+		//배경 생성
+		CreateRect(hMyBrush, hOldBrush, hDCBuffer, hWnd, RGB(0, 0, 0), 0, 0, window.x, window.y);
+		DrawBitmap(hDCBuffer, (window.x - 1920) / 2, -820, backGround);
+
+		TCHAR str[128];
+		wsprintf(str, TEXT("Time : %d"), time/60);
+		CreateText(hMyBrush, hOldBrush, hDCBuffer, hWnd,1,1, str);
+
+		//테트리스판 생성
+		CreateRect(hMyBrush, hOldBrush, hDCBuffer, hWnd, RGB(50, 50, 50), boardPos.x, boardPos.y, boardBox.x, boardBox.y);
+
+		for (int y = 0; y < 20; y++)
+			for (int x = 0; x < 12; x++)
+				if (GetBoard(y, x) != 0)
+					CreateRect(hMyBrush, hOldBrush, hDCBuffer, hWnd, GetColor(GetBoard(y, x)), boardPos.x + x * blockSize, boardPos.y + y * blockSize, blockSize, blockSize);
+
+
+		for(int i = 0; i < 4; i++)
+			CreateRect(hMyBrush, hOldBrush, hDCBuffer, hWnd, GetColor(polygonNum + 2), boardPos.x + (playerBlockPos.x + GetPolygon(polygonNum,angleNum,i).x) * blockSize, boardPos.y + (playerBlockPos.y + GetPolygon(polygonNum, angleNum, i).y) * blockSize, blockSize, blockSize);
+
+		//버퍼에있는 그림을 화면에 그려줌
+		BitBlt(hDC, 0, 0, crt.right, crt.bottom, hDCBuffer, 0, 0, SRCCOPY);
+
+
+
+
+
+
+
+
+
+
+
+		//버퍼를 해체해줌
+		DeleteObject(SelectObject(hDCBuffer, hbmOldBuffer));
+		DeleteDC(hDCBuffer);
+		ReleaseDC(hWnd, hDCBuffer);
+
+		break;
+	case WM_DESTROY :							// 윈도우가 파괴됨
+		PostQuitMessage(0);						// 메세지 큐에 WM_QUIT 메세지를 넣어주는 함수 (WM_QUIT : 윈도우를 종료하라는 메세지)
 		return 0;
 	}
 
@@ -47,6 +210,8 @@ int APIENTRY WinMain
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	hINSTANCE = hInst;
+
 	WNDCLASS wndClass;
 
 	//cbClsExtra 와 cbWndExtra는 현재 사용되지 않는 부분임 0으로 처리
@@ -73,14 +238,14 @@ int APIENTRY WinMain
 
 	HWND hWnd = CreateWindow
 	(
-		TEXT("Test"),							// 윈도우 클래스 이름을 검색해서 찾음
-		TEXT("API"),							// 타이틀 이름을 의미
-		WS_OVERLAPPEDWINDOW - WS_MINIMIZEBOX,	// 생성할 윈도우의 스타일을 지정 (예 >> WS_MINIMIZEBOX : 최소화 버튼을 만듬 , WS_OVERLAPPEDWINDOW : 가장 일반적인 윈도우 스타일)(현재 기본스타일에서 최소화 버튼을 뺌)
-		0,0,									// 윈도우가 생성되는 x,y 좌표
-		300,300,								// 윈도우의 width , height 크기
-		NULL,									// 부모 윈도우에 대한 정보를 지정(부모 윈도우가 없어서 NULL 처리)
-		NULL,									// 메뉴를 지정함 (지금은 없는것으로 처리 NULL)
-		hInst,									// 해당윈도우를 생성하는 윈도우 식별자 값을 입력해줌
+		TEXT("Test"),								// 윈도우 클래스 이름을 검색해서 찾음
+		TEXT("API"),								// 타이틀 이름을 의미
+		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,	// 생성할 윈도우의 스타일을 지정 (예 >> WS_MINIMIZEBOX : 최소화 버튼을 만듬 , WS_OVERLAPPEDWINDOW : 가장 일반적인 윈도우 스타일)(현재 기본스타일에서 최소화 버튼을 뺌)
+		(GetSystemMetrics(SM_CXFULLSCREEN) - window.x)/2, (GetSystemMetrics(SM_CYFULLSCREEN) - window.y) / 2,	// 윈도우가 생성되는 x,y 좌표
+		window.x, window.y,																						// 윈도우의 width , height 크기
+		NULL,										// 부모 윈도우에 대한 정보를 지정(부모 윈도우가 없어서 NULL 처리)
+		NULL,										// 메뉴를 지정함 (지금은 없는것으로 처리 NULL)
+		hInst,										// 해당윈도우를 생성하는 윈도우 식별자 값을 입력해줌
 		0
 	);
 
