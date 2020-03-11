@@ -22,7 +22,7 @@ int time = 0;
 
 Vector2 window = Vector2(1200,660);
 Vector2 boardBox = Vector2(360, 600);
-Vector2 boardPos = Vector2((window.x - boardBox.x) / 2, 5);
+Vector2 boardPos = Vector2((window.x - boardBox.x) / 2, 0);
 
 Vector2 playerBlockPos = Vector2(6, 0);
 int polygonNum = 2;
@@ -43,7 +43,8 @@ RECT crt;
 
 HINSTANCE hINSTANCE;
 static HBITMAP backGround;
-
+static HBITMAP outline;
+static HBITMAP blockImg[6];
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +62,10 @@ LRESULT WindowProc
 	{
 	case WM_CREATE:								// 윈도우가 생성될때	
 
-		backGround = LoadBitmap(hINSTANCE, MAKEINTRESOURCE(IDB_IMG));
+		backGround = LoadBitmap(hINSTANCE, MAKEINTRESOURCE(IDB_BITMAP1));
+		outline = LoadBitmap(hINSTANCE, MAKEINTRESOURCE(IDB_BITMAP2));
+		for(int i = 0; i < 6; i++)
+			blockImg[i] = LoadBitmap(hINSTANCE, MAKEINTRESOURCE(IDB_BITMAP3 + i));
 
 		polygonNum = RandomRange(0, 6);
 
@@ -124,7 +128,7 @@ LRESULT WindowProc
 		}
 
 
-	case WM_PAINT:
+	case WM_PAINT:	//윈도우 사이즈 변경 및 최소화 최대화가 발생될때 호출되는 메시지
 
 		//버퍼에 화면크기만큼 그릴수있게해줌
 		hDCBuffer = CreateCompatibleDC(hDC);
@@ -140,23 +144,31 @@ LRESULT WindowProc
 
 		//배경 생성
 		CreateRect(hMyBrush, hOldBrush, hDCBuffer, hWnd, RGB(0, 0, 0), 0, 0, window.x, window.y);
-		DrawBitmap(hDCBuffer, (window.x - 1920) / 2, -820, backGround);
+		DrawBitmap(hDCBuffer, 0, 0, backGround);
 
 		TCHAR str[128];
 		wsprintf(str, TEXT("Time : %d"), time/60);
-		CreateText(hMyBrush, hOldBrush, hDCBuffer, hWnd,1,1, str);
+		//CreateText(hMyBrush, hOldBrush, hDCBuffer, hWnd,1,1, str);
 
 		//테트리스판 생성
 		CreateRect(hMyBrush, hOldBrush, hDCBuffer, hWnd, RGB(50, 50, 50), boardPos.x, boardPos.y, boardBox.x, boardBox.y);
 
 		for (int y = 0; y < 20; y++)
 			for (int x = 0; x < 12; x++)
+			{
 				if (GetBoard(y, x) != 0)
-					CreateRect(hMyBrush, hOldBrush, hDCBuffer, hWnd, GetColor(GetBoard(y, x)), boardPos.x + x * blockSize, boardPos.y + y * blockSize, blockSize, blockSize);
+				{
+					if (GetBoard(y, x) == 1)
+						DrawBitmap(hDCBuffer, boardPos.x + x * blockSize, boardPos.y + y * blockSize, outline);
+					else
+						DrawBitmap(hDCBuffer, boardPos.x + x * blockSize, boardPos.y + y * blockSize, blockImg[GetBoard(y, x) - 2]);
+				}
+			}
 
+		for (int i = 0; i < 4; i++)
+			DrawBitmap(hDCBuffer, boardPos.x + (playerBlockPos.x + GetPolygon(polygonNum, angleNum, i).x) * blockSize, boardPos.y + (playerBlockPos.y + GetPolygon(polygonNum, angleNum, i).y) * blockSize, blockImg[polygonNum]);
 
-		for(int i = 0; i < 4; i++)
-			CreateRect(hMyBrush, hOldBrush, hDCBuffer, hWnd, GetColor(polygonNum + 2), boardPos.x + (playerBlockPos.x + GetPolygon(polygonNum,angleNum,i).x) * blockSize, boardPos.y + (playerBlockPos.y + GetPolygon(polygonNum, angleNum, i).y) * blockSize, blockSize, blockSize);
+			//CreateRect(hMyBrush, hOldBrush, hDCBuffer, hWnd, GetColor(polygonNum + 2), boardPos.x + (playerBlockPos.x + GetPolygon(polygonNum,angleNum,i).x) * blockSize, boardPos.y + (playerBlockPos.y + GetPolygon(polygonNum, angleNum, i).y) * blockSize, blockSize, blockSize);
 
 		//버퍼에있는 그림을 화면에 그려줌
 		BitBlt(hDC, 0, 0, crt.right, crt.bottom, hDCBuffer, 0, 0, SRCCOPY);
