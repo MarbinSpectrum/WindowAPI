@@ -45,6 +45,7 @@ HINSTANCE hINSTANCE;
 static HBITMAP backGround;
 static HBITMAP outline;
 static HBITMAP blockImg[6];
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,7 +80,7 @@ LRESULT WindowProc
 
 	case WM_COMMAND:							// 사용자가 추가한 이벤트를 처리할 때 사용됨
 		break;
-	case WM_KEYDOWN:
+	case WM_KEYDOWN:							// 키입력시 발생함
 		switch (wParam) {
 		case VK_LEFT:
 			if (CanMove(playerBlockPos.x - 1, playerBlockPos.y, polygonNum, angleNum))
@@ -113,7 +114,7 @@ LRESULT WindowProc
 		}
 	case WM_TIMER:								// 타이머 신호가 왓을때
 		time++;
-		if (time % 60 == 0)
+		if (time % 100 == 0)						// 
 		{
 			if (CanMove(playerBlockPos.x, playerBlockPos.y + 1, polygonNum, angleNum))
 				playerBlockPos.y += 1;
@@ -140,14 +141,12 @@ LRESULT WindowProc
 
 
 
-
-
 		//배경 생성
 		CreateRect(hMyBrush, hOldBrush, hDCBuffer, hWnd, RGB(0, 0, 0), 0, 0, window.x, window.y);
 		DrawBitmap(hDCBuffer, 0, 0, backGround);
 
-		TCHAR str[128];
-		wsprintf(str, TEXT("Time : %d"), time/60);
+		//TCHAR str[128];
+		//wsprintf(str, TEXT("Time : %d"), time/60);
 		//CreateText(hMyBrush, hOldBrush, hDCBuffer, hWnd,1,1, str);
 
 		//테트리스판 생성
@@ -165,23 +164,17 @@ LRESULT WindowProc
 				}
 			}
 
+		//플레이어의 블록을 그려줌
 		for (int i = 0; i < 4; i++)
 			DrawBitmap(hDCBuffer, boardPos.x + (playerBlockPos.x + GetPolygon(polygonNum, angleNum, i).x) * blockSize, boardPos.y + (playerBlockPos.y + GetPolygon(polygonNum, angleNum, i).y) * blockSize, blockImg[polygonNum]);
 
-			//CreateRect(hMyBrush, hOldBrush, hDCBuffer, hWnd, GetColor(polygonNum + 2), boardPos.x + (playerBlockPos.x + GetPolygon(polygonNum,angleNum,i).x) * blockSize, boardPos.y + (playerBlockPos.y + GetPolygon(polygonNum, angleNum, i).y) * blockSize, blockSize, blockSize);
+
+
+
+
 
 		//버퍼에있는 그림을 화면에 그려줌
 		BitBlt(hDC, 0, 0, crt.right, crt.bottom, hDCBuffer, 0, 0, SRCCOPY);
-
-
-
-
-
-
-
-
-
-
 
 		//버퍼를 해체해줌
 		DeleteObject(SelectObject(hDCBuffer, hbmOldBuffer));

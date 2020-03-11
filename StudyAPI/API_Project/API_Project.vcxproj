@@ -176,7 +176,6 @@
     <Image Include="..\RedBlock.bmp" />
     <Image Include="..\YellowBlock.bmp" />
     <Image Include="API_Project.ico" />
-    <Image Include="C:\Users\Ymk\Pictures\Img.jpg" />
     <Image Include="small.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
