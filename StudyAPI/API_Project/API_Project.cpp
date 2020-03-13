@@ -132,8 +132,8 @@ LRESULT WindowProc
 	case WM_PAINT:	//윈도우 사이즈 변경 및 최소화 최대화가 발생될때 호출되는 메시지
 
 		//버퍼에 화면크기만큼 그릴수있게해줌
-		hDCBuffer = CreateCompatibleDC(hDC);
-		hbmBuffer = CreateCompatibleBitmap(hDC, crt.right, crt.bottom);
+		hDCBuffer = CreateCompatibleDC(hDC);								//DC를 복사해줌
+		hbmBuffer = CreateCompatibleBitmap(hDC, crt.right, crt.bottom);		//
 		hbmOldBuffer = (HBITMAP)SelectObject(hDCBuffer, hbmBuffer);
 
 
