@@ -63,10 +63,32 @@ LRESULT WindowProc
 	{
 	case WM_CREATE:								// 윈도우가 생성될때	
 
-		backGround = LoadBitmap(hINSTANCE, MAKEINTRESOURCE(IDB_BITMAP1));
-		outline = LoadBitmap(hINSTANCE, MAKEINTRESOURCE(IDB_BITMAP2));
-		for(int i = 0; i < 6; i++)
-			blockImg[i] = LoadBitmap(hINSTANCE, MAKEINTRESOURCE(IDB_BITMAP3 + i));
+		backGround = (HBITMAP)LoadImage(NULL, TEXT("Img.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+		outline = (HBITMAP)LoadImage(NULL, TEXT("Outline.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+		for (int i = 0; i < 6; i++)
+		{
+			switch (i)
+			{
+			case 0 :
+				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("RedBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+				break;
+			case 1:
+				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("OrangeBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+				break;
+			case 2:
+				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("YellowBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+				break;
+			case 3:
+				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("GreenBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+				break;
+			case 4:
+				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("BlueBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+				break;
+			case 5:
+				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("PurpleBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+				break;
+			}
+		}
 
 		polygonNum = RandomRange(0, 6);
 

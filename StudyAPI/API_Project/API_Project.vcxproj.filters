@@ -57,29 +57,5 @@
     <Image Include="API_Project.ico">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="..\Img.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="..\Outline.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="..\RedBlock.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="..\BlueBlock.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="..\GreenBlock.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="..\OrangeBlock.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="..\PurpleBlock.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="..\YellowBlock.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
   </ItemGroup>
 </Project>
