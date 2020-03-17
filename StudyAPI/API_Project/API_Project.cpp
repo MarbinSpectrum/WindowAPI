@@ -63,29 +63,29 @@ LRESULT WindowProc
 	{
 	case WM_CREATE:								// 윈도우가 생성될때	
 
-		backGround = (HBITMAP)LoadImage(NULL, TEXT("Img.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-		outline = (HBITMAP)LoadImage(NULL, TEXT("Outline.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+		backGround = (HBITMAP)LoadImage(NULL, TEXT("Img/BackGround.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+		outline = (HBITMAP)LoadImage(NULL, TEXT("Img/Outline.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 		for (int i = 0; i < 6; i++)
 		{
 			switch (i)
 			{
 			case 0 :
-				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("RedBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("Img/RedBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 				break;
 			case 1:
-				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("OrangeBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("Img/OrangeBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 				break;
 			case 2:
-				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("YellowBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("Img/YellowBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 				break;
 			case 3:
-				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("GreenBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("Img/GreenBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 				break;
 			case 4:
-				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("BlueBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("Img/BlueBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 				break;
 			case 5:
-				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("PurpleBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+				blockImg[i] = (HBITMAP)LoadImage(NULL, TEXT("Img/PurpleBlock.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 				break;
 			}
 		}
@@ -99,7 +99,10 @@ LRESULT WindowProc
 
 		hDC = GetDC(hWnd);
 		break;
-
+	case IDM_EXIT:
+		DestroyWindow(hWnd);
+		break;
+	default:
 	case WM_COMMAND:							// 사용자가 추가한 이벤트를 처리할 때 사용됨
 		break;
 	case WM_KEYDOWN:							// 키입력시 발생함
@@ -206,6 +209,7 @@ LRESULT WindowProc
 		break;
 	case WM_DESTROY :							// 윈도우가 파괴됨
 		PostQuitMessage(0);						// 메세지 큐에 WM_QUIT 메세지를 넣어주는 함수 (WM_QUIT : 윈도우를 종료하라는 메세지)
+		KillTimer(hWnd, 1);
 		return 0;
 	}
 
@@ -291,13 +295,17 @@ int APIENTRY WinMain
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	MSG msg;					
+	MSG msg;
+	GetMessage(&msg, hWnd, 0, 0);
 	// 윈도우는 메시지를 큐 방식을 사용 -> 발생된 메세지 순서대로 처리가 됨
-	while (GetMessage(&msg, hWnd, 0, 0))		// GetMessage는 하나의 메시지를 받아오는 기능을함!! 메시지 큐에 메시지가 없으면 대기함 (scanf같은 느낌으로)
+	while (msg.message != WM_QUIT)		// GetMessage는 하나의 메시지를 받아오는 기능을함!! 메시지 큐에 메시지가 없으면 대기함 (scanf같은 느낌으로)
 	{
-		TranslateMessage(&msg);		// 키보드 입력 메시지를 가공하여 컴퓨터가 처리할 수 있도록 만듬 (예 >> [WM_KEYDOWN A] -> [A키가 눌리면 A가 입력됬다는 메세지를 만듬])
-		DispatchMessage(&msg);		// 윈도우에 등록된 프로시저 함수를 호출하는 함수	
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);		// 키보드 입력 메시지를 가공하여 컴퓨터가 처리할 수 있도록 만듬 (예 >> [WM_KEYDOWN A] -> [A키가 눌리면 A가 입력됬다는 메세지를 만듬])
+			DispatchMessage(&msg);		// 윈도우에 등록된 프로시저 함수를 호출하는 함수	
+		}
 	}
 
-	return 0;
+	return (int)msg.wParam;
 }

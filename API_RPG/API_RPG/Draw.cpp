@@ -56,6 +56,16 @@ void DrawBitmap(HDC hdc, int x, int y, int img_width, int img_height, int img_x,
 
 void DrawBitmap(HDC hdc, int x, int y, int img_width, int img_height, int img_x, int img_y, HBITMAP hBit, HBITMAP hBitMask)
 {
+	DrawBitmap(hdc, x, y, img_width, img_height, img_x, img_y, hBit, hBitMask, false);
+}
+
+void DrawBitmap(HDC hdc, int x, int y, int img_width, int img_height, int img_x, int img_y, HBITMAP hBit, HBITMAP hBitMask, bool flipX)
+{
+	DrawBitmap(hdc, x, y, img_width, img_height, img_x, img_y, hBit, hBitMask, flipX, false);
+}
+
+void DrawBitmap(HDC hdc, int x, int y, int img_width, int img_height, int img_x, int img_y, HBITMAP hBit, HBITMAP hBitMask, bool flipX, bool flipY)
+{
 	HDC MemDC;
 	HBITMAP OldBitmap;
 	int bx, by;
@@ -80,9 +90,20 @@ void DrawBitmap(HDC hdc, int x, int y, int img_width, int img_height, int img_x,
 		OldBitmap = (HBITMAP)SelectObject(MemDC, hBit);
 
 		BitBlt(hdc, x, y, img_width, img_height, MemDC, img_x, img_y, SRCCOPY);
+
+		StretchBlt(hdc, x, y, img_width, img_height, hdc, x, y, img_width, img_height, SRCCOPY);
 	}
+
+
+	StretchBlt(hdc, x, y, img_width, img_height, hdc, x + (flipX ? img_width : 0), y + (flipY ? img_height : 0), (flipX ? -img_width : +img_width), (flipX ? -img_height : +img_height), SRCCOPY);
+
 
 	SelectObject(MemDC, OldBitmap);
 
 	DeleteDC(MemDC);
 }
+
+HBITMAP Draw::character = nullptr;
+HBITMAP Draw::characterMask = nullptr;
+Vector2 Draw::characterRect(32, 40);
+
