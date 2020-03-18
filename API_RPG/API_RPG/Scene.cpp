@@ -23,8 +23,18 @@ void Scene::Update()
 
 }
 
-void Scene::Input()
+void Scene::Input(WPARAM wParam, LPARAM lParam)
 {
+	switch (wParam) {
+	case VK_LEFT:
+		break;
+	case VK_RIGHT:
+		break;
+	case VK_UP:
+		break;
+	case VK_DOWN:
+		break;
+	}
 }
 
 void Scene::Run()

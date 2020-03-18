@@ -156,6 +156,9 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="InGame.h" />
     <ClInclude Include="Logo.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
@@ -167,6 +170,9 @@
     <ClCompile Include="Draw.cpp" />
     <ClCompile Include="InGame.cpp" />
     <ClCompile Include="Logo.cpp" />
+    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="ObjectManager.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Title.cpp" />

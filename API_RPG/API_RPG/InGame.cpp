@@ -1,7 +1,11 @@
 #include "InGame.h"
+#include "SceneManager.h"
+#include "ObjectManager.h"
 
 void InGame::Awake()
 {
+	OBJECTMANAGER->Add(new Player);
+
 }
 
 void InGame::Start()
@@ -10,10 +14,21 @@ void InGame::Start()
 
 void InGame::Update()
 {
+	OBJECTMANAGER->Update();
 }
 
-void InGame::Input()
+void InGame::Input(WPARAM wParam, LPARAM lParam)
 {
+	switch (wParam) {
+	case VK_LEFT:
+		break;
+	case VK_RIGHT:
+		break;
+	case VK_UP:
+		break;
+	case VK_DOWN:
+		break;
+	}
 }
 
 void InGame::Run()
@@ -22,11 +37,10 @@ void InGame::Run()
 
 void InGame::Render(HDC hdc)
 {
-	for (int i = 0; i < 4; i++)
-		for (int j = 0; j < 4; j++)
-			DrawBitmap(hdc, i * Draw::characterRect.x, j * Draw::characterRect.y, Draw::characterRect.x, Draw::characterRect.y, i * Draw::characterRect.x, j * Draw::characterRect.y, Draw::character, Draw::characterMask);
+	OBJECTMANAGER->Render(hdc);
 }
 
 void InGame::Exit()
 {
+	OBJECTMANAGER->Clear();
 }

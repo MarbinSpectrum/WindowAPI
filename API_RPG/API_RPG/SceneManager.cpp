@@ -13,6 +13,8 @@ void SceneManager::Init(HWND Hwnd)
 	//현재 윈도우에 맞는 헨들에서 DC를 받아옴
 	frontDC = GetDC(hwnd);
 
+	sceneAwake = false;
+	sceneStart = false;
 }
 
 void SceneManager::Add(SceneType i,Scene *p)
@@ -53,16 +55,45 @@ void SceneManager::Run()
 		sceneData[nowScene]->Run();
 }
 
-void SceneManager::Input()
+void SceneManager::Input(WPARAM wParam, LPARAM lParam)
 {
 	if (sceneData.find(nowScene) != sceneData.end())
-		sceneData[nowScene]->Input();
+		sceneData[nowScene]->Input(wParam, lParam);
+}
+
+void SceneManager::Awake()
+{
+	if (sceneAwake)
+		return;
+	sceneAwake = true;
+
+	if (sceneData.find(nowScene) != sceneData.end())
+		sceneData[nowScene]->Awake();
+
+	Start();
+}
+
+void SceneManager::Start()
+{
+	if (sceneStart)
+		return;
+	sceneStart = true;
+
+	if (sceneData.find(nowScene) != sceneData.end())
+		sceneData[nowScene]->Start();
 }
 
 void SceneManager::Update()
 {
 	if (sceneData.find(nowScene) != sceneData.end())
 		sceneData[nowScene]->Update();
+}
+
+
+void SceneManager::Exit()
+{
+	if (sceneData.find(nowScene) != sceneData.end())
+		sceneData[nowScene]->Exit();
 }
 
 void SceneManager::Release()
@@ -78,6 +109,14 @@ void SceneManager::Release()
 	sceneData.clear();
 
 	SAFE_RELEASE(instance);
+}
+
+void SceneManager::MoveScene(SceneType i)
+{
+	Exit();
+	nowScene = i;
+	sceneAwake = false;
+	sceneStart = false;
 }
 
 

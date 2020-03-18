@@ -1,6 +1,7 @@
 ﻿#include "framework.h"
 #include "API_RPG.h"
 #include "SceneManager.h"
+#include "ObjectManager.h"
 #include "Draw.h"
 #include "Resource.h"
 
@@ -186,22 +187,16 @@ LRESULT WindowProc
 	case WM_COMMAND:							// 사용자가 추가한 이벤트를 처리할 때 사용됨
 		break;
 	case WM_KEYDOWN:							// 키입력시 발생함
-		switch (wParam) {
-		case VK_LEFT:
-			break;
-		case VK_RIGHT:
-			break;
-		case VK_UP:
-			break;
-		case VK_DOWN:
-			break;
-		}
+		SCENEMANAGER->Input(wParam, lParam);
+		OBJECTMANAGER->Input(wParam, lParam);
+		break;
 	case WM_TIMER:								// 타이머 신호가 왓을때
+		SCENEMANAGER->Awake();
+		SCENEMANAGER->Update();
 		time++;
 	case WM_PAINT:	//윈도우 사이즈 변경 및 최소화 최대화가 발생될때 호출되는 메시지
 
 		SCENEMANAGER->Render();
-
 		break;
 	case WM_DESTROY:							// 윈도우가 파괴됨
 		PostQuitMessage(0);						// 메세지 큐에 WM_QUIT 메세지를 넣어주는 함수 (WM_QUIT : 윈도우를 종료하라는 메세지)

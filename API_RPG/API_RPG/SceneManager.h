@@ -12,7 +12,8 @@ private :
 	static SceneManager *instance;
 
 public :
-
+	bool sceneAwake = false;
+	bool sceneStart = false;
 	typedef enum SceneType
 	{
 		LOGO,
@@ -29,9 +30,14 @@ public :
 	void Add(SceneType i, Scene *p);
 	void Render();
 	void Run();
-	void Input();
+	void Input(WPARAM wParam, LPARAM lParam);
+	void Awake();
+	void Start();
 	void Update();
+	void Exit();
 	void Release();
+
+	void MoveScene(SceneType i);
 
 public:
 	SceneType nowScene;

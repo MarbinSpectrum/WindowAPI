@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include "framework.h"
 #include "resource.h"
 
@@ -21,7 +22,7 @@ void DrawBitmap(HDC hdc, int x, int y, int img_width, int img_height, int img_x,
 void DrawBitmap(HDC hdc, int x, int y, int img_width, int img_height, int img_x, int img_y, HBITMAP hBit, HBITMAP hBitMask);
 void DrawBitmap(HDC hdc, int x, int y, int img_width, int img_height, int img_x, int img_y, HBITMAP hBit, HBITMAP hBitMask, bool flipX);
 void DrawBitmap(HDC hdc, int x, int y, int img_width, int img_height, int img_x, int img_y, HBITMAP hBit, HBITMAP hBitMask, bool flipX, bool flipY);
-
+void DrawBitmap(HDC hdc, int x, int y, int img_width, int img_height, int img_x, int img_y, HBITMAP hBit, HBITMAP hBitMask, bool flipX, bool flipY, Vector2 scale);
 
 class Draw
 {
