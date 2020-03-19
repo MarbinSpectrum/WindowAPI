@@ -54,6 +54,9 @@
     <ClInclude Include="ObjectManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="TitleImg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API_RPG.cpp">
@@ -86,6 +89,9 @@
     <ClCompile Include="ObjectManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="TitleImg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="API_RPG.rc">
@@ -103,6 +109,9 @@
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="CharacterMask.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="Title.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

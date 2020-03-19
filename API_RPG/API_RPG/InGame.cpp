@@ -5,7 +5,6 @@
 void InGame::Awake()
 {
 	OBJECTMANAGER->Add(new Player);
-
 }
 
 void InGame::Start()
@@ -29,6 +28,7 @@ void InGame::Input(WPARAM wParam, LPARAM lParam)
 	case VK_DOWN:
 		break;
 	}
+	OBJECTMANAGER->Input(wParam, lParam);
 }
 
 void InGame::Run()

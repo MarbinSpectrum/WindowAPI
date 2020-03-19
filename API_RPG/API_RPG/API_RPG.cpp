@@ -173,8 +173,9 @@ LRESULT WindowProc
 		SCENEMANAGER->Add(SceneManager::INGAME, new InGame);
 
 		Draw::character = (HBITMAP)LoadImage(NULL, TEXT("Character.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-
 		Draw::characterMask = (HBITMAP)LoadImage(NULL, TEXT("CharacterMask.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+
+		Draw::titleImg = (HBITMAP)LoadImage(NULL, TEXT("Title.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
 		GetClientRect(hWnd, &crt);				// 화면크기를 Rect변수에 넣어줌
 
@@ -188,7 +189,6 @@ LRESULT WindowProc
 		break;
 	case WM_KEYDOWN:							// 키입력시 발생함
 		SCENEMANAGER->Input(wParam, lParam);
-		OBJECTMANAGER->Input(wParam, lParam);
 		break;
 	case WM_TIMER:								// 타이머 신호가 왓을때
 		SCENEMANAGER->Awake();

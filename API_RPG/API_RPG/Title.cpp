@@ -4,6 +4,8 @@
 
 void Title::Awake()
 {
+	OBJECTMANAGER->Add(new TitleImg);
+	OBJECTMANAGER->Add(new Player);
 }
 
 void Title::Start()
@@ -12,6 +14,7 @@ void Title::Start()
 
 void Title::Update()
 {
+	OBJECTMANAGER->Update();
 }
 
 void Title::Input(WPARAM wParam, LPARAM lParam)
@@ -26,6 +29,7 @@ void Title::Input(WPARAM wParam, LPARAM lParam)
 	case VK_DOWN:
 		break;
 	}
+	OBJECTMANAGER->Input(wParam, lParam);
 }
 
 void Title::Run()

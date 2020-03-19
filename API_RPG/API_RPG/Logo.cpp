@@ -12,6 +12,7 @@ void Logo::Start()
 
 void Logo::Update()
 {
+	OBJECTMANAGER->Update();
 }
 
 void Logo::Input(WPARAM wParam, LPARAM lParam)
@@ -26,6 +27,7 @@ void Logo::Input(WPARAM wParam, LPARAM lParam)
 	case VK_DOWN:
 		break;
 	}
+	OBJECTMANAGER->Input(wParam, lParam);
 }
 
 void Logo::Run()

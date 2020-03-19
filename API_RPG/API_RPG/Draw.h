@@ -30,4 +30,6 @@ public:
 	static HBITMAP character;
 	static Vector2 characterRect;
 	static HBITMAP characterMask;
+
+	static HBITMAP titleImg;
 };

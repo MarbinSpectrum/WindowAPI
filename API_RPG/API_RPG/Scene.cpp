@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "ObjectManager.h"
 
 Scene::Scene()
 {
@@ -35,6 +36,8 @@ void Scene::Input(WPARAM wParam, LPARAM lParam)
 	case VK_DOWN:
 		break;
 	}
+
+	OBJECTMANAGER->Input(wParam, lParam);
 }
 
 void Scene::Run()

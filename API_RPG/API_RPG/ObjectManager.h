@@ -3,6 +3,7 @@
 #include<vector>
 
 #include"Player.h"
+#include"TitleImg.h"
 
 class ObjectManager
 {

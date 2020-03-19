@@ -4,7 +4,7 @@ SceneManager *SceneManager::instance = nullptr;
 
 void SceneManager::Init(HWND Hwnd)
 {
-	nowScene = INGAME;
+	nowScene = TITLE;
 
 	hwnd = Hwnd;
 

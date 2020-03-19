@@ -164,6 +164,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="TitleImg.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API_RPG.cpp" />
@@ -176,6 +177,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="TitleImg.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="API_RPG.rc" />
@@ -185,6 +187,7 @@
     <Image Include="Character.bmp" />
     <Image Include="CharacterMask.bmp" />
     <Image Include="small.ico" />
+    <Image Include="Title.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

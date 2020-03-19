@@ -73,7 +73,6 @@ void DrawBitmap(HDC hdc, int x, int y, int img_width, int img_height, int img_x,
 void DrawBitmap(HDC hdc, int x, int y, int img_width, int img_height, int img_x, int img_y, HBITMAP hBit, HBITMAP hBitMask, bool flipX, bool flipY, Vector2 scale)
 {
 	HDC MemDC;
-	HBITMAP OldBitmap;
 	int bx, by;
 	BITMAP bit;
 
@@ -85,29 +84,47 @@ void DrawBitmap(HDC hdc, int x, int y, int img_width, int img_height, int img_x,
 
 	if (hBitMask != NULL)
 	{
-		OldBitmap = (HBITMAP)SelectObject(MemDC, hBitMask);
-
+		SelectObject(MemDC, hBitMask);
 		BitBlt(hdc, x, y, img_width, img_height, MemDC, img_x, img_y, SRCAND);
+
 		SelectObject(MemDC, hBit);
+
 		BitBlt(hdc, x, y, img_width, img_height, MemDC, img_x, img_y, SRCPAINT);
+
+		//StretchBlt(hdc,
+		//	x + (flipX ? img_width : 0) * scale.x,
+		//	y + (flipY ? img_height : 0) * scale.y,
+
+		//	img_width * (flipX ? -1 : +1) * scale.x,
+		//	img_height * (flipY ? -1 : +1) * scale.y,
+		//	hdc, x, y, img_width, img_height, SRCPAINT);
+
+		////////////////////////////////////////////////////////////////////////////////////////////
+
+
 	}
 	else
 	{
-		OldBitmap = (HBITMAP)SelectObject(MemDC, hBit);
+		SelectObject(MemDC, hBit);
 
 		BitBlt(hdc, x, y, img_width, img_height, MemDC, img_x, img_y, SRCCOPY);
+
+		StretchBlt(hdc,
+			x + (flipX ? img_width : 0) * scale.x,
+			y + (flipY ? img_height : 0) * scale.y,
+
+			img_width * (flipX ? -1 : +1) * scale.x,
+			img_height * (flipY ? -1 : +1) * scale.y,
+			hdc, x, y, img_width, img_height, SRCCOPY);
 	}
 
-
-	StretchBlt(hdc, x + (flipX ? img_width : 0) * scale.x, y + (flipY ? img_height : 0) * scale.y, img_width * (flipX ? -1 : +1) * scale.x, img_height * (flipY ? -1 : +1) * scale.y, hdc, x, y, img_width, img_height, SRCCOPY);
-
-
-	SelectObject(MemDC, OldBitmap);
-
+	//SelectObject(MemDC, OldBitmap);
 	DeleteDC(MemDC);
 }
 
 HBITMAP Draw::character = nullptr;
 HBITMAP Draw::characterMask = nullptr;
 Vector2 Draw::characterRect(32, 40);
+
+HBITMAP Draw::titleImg = nullptr;
 
